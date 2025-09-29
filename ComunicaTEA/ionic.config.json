@@ -1,0 +1,7 @@
+{
+  "name": "ComunicaTEA",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
