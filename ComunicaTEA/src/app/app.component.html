@@ -1,3 +1,22 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu side="start" menuId="m1" contentId="main">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu Content</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="menu-content">
+    <ion-menu-toggle>
+      <ion-button expand="block" fill="outline" [routerLink]="['/index']">
+        <ion-icon name="home-outline" slot="start"></ion-icon> Home
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" [routerLink]="['/settings']">
+        <ion-icon name="settings-outline" slot="start" color="red"></ion-icon> Settings
+      </ion-button>
+    </ion-menu-toggle>
+  </ion-content>
+
+  </ion-menu>
+  <ion-router-outlet id="main"></ion-router-outlet>
 </ion-app>

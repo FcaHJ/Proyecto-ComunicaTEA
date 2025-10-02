@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@capacitor/core": "^7.4.3",
+    "@ionic/angular": "^8.7.5",
+    "@ionic/angular-server": "^8.7.5",
+    "@ionic/angular-toolkit": "^11.0.1"
+  }
+}
