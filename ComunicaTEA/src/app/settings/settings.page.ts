@@ -9,7 +9,7 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class SettingsPage implements OnInit {
 

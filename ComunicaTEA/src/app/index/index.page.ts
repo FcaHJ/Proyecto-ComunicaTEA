@@ -9,7 +9,7 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './index.page.html',
   styleUrls: ['./index.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class IndexPage implements OnInit {
 
@@ -17,5 +17,7 @@ export class IndexPage implements OnInit {
 
   ngOnInit() {
   }
+
+  categorias = ['Tecnología', 'Hogar', 'Deporte', 'Moda', 'Electrónica'];
 
 }
