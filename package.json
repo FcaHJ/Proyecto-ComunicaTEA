@@ -3,6 +3,8 @@
     "@capacitor/core": "^7.4.3",
     "@ionic/angular": "^8.7.5",
     "@ionic/angular-server": "^8.7.5",
-    "@ionic/angular-toolkit": "^11.0.1"
+    "@ionic/angular-toolkit": "^11.0.1",
+    "@ionic/pwa-elements": "^3.3.0",
+    "@ionic/storage-angular": "^4.0.0"
   }
 }

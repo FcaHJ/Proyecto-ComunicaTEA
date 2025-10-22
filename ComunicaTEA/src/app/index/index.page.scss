@@ -20,6 +20,47 @@
   width: 60%;
 }
 
+.card-container {
+  width: 160px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* separa imagen y descripción */
+  position: relative;
+}
+
+.card-container ion-card-header {
+  flex-grow: 1; /* hace que la imagen use el espacio disponible */
+}
+
+.card-container ion-img {
+  height: 100%;
+}
+
+.card-container .description {
+  text-align: center;
+  font-size: 14px;
+  padding: 8px;
+  margin-bottom: 1rem;
+  flex-shrink: 0; /* evita que se comprima */
+}
+
+.btn-fav {
+  position: absolute;
+  bottom: 0;   /* distancia desde abajo */
+  right: 0;    /* distancia desde la derecha */
+  z-index: 10;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-fav ion-icon {
+  font-size: 20px;
+}
+
+.description{
+  text-align: center;
+}
+
 .categorias {
   display: flex;
   overflow-x: auto;
