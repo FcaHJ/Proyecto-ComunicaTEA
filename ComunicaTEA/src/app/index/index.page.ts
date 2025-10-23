@@ -13,6 +13,9 @@ import { Cards } from '../services/cards';
 })
 export class IndexPage implements OnInit {
   cards: any[] = [];
+  selectedCategory: string | null = null;
+  isModalOpen = false;
+  selectedCard: any = null;
 
   constructor(private cardService: Cards) { }
 
@@ -37,7 +40,6 @@ export class IndexPage implements OnInit {
 
   categories = ['Tecnología', 'Hogar', 'Deporte', 'Alimentación', 'Ocio'];
 
-  selectedCategory: string | null = null;
   selectCategory(category: string) {
     if (this.selectedCategory === category) {
     // Si ya está seleccionada, deseleccionamos
@@ -45,6 +47,16 @@ export class IndexPage implements OnInit {
   } else {
     this.selectedCategory = category;
   }
+  }
+
+  openModal(card: any) {
+    this.selectedCard = card;
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedCard = null;
   }
 
 }

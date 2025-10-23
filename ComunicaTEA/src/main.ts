@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { heart, heartOutline, homeOutline, settingsOutline } from 'ionicons/icons';
+import { closeOutline, heart, heartOutline, homeOutline, settingsOutline, volumeMediumOutline } from 'ionicons/icons';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -22,4 +22,6 @@ addIcons({
   'home-outline': homeOutline,
   'heart-outline' : heartOutline,
   'heart': heart,
+  'volume': volumeMediumOutline,
+  'close': closeOutline
 });

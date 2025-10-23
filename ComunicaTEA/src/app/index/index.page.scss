@@ -80,6 +80,47 @@ ion-chip {
   border-radius: 16px;
 }
 
+.card-modal {
+  --width: 90%;
+  --height: 80%;
+  --border-radius: 20px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column; /* ✅ ORGANIZA EN COLUMNA */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%; /* ✅ OBLIGA A USAR TODA LA ALTURA DEL MODAL */
+  padding: 20px; /* ✅ SEPARACIÓN */
+  //border-radius: 40px solid black;
+}
+
+.close-icon{
+  padding: 10px;
+}
+
+.modal-content ion-img {
+  width: 90%;
+  max-width: 350px; /* ✅ QUE NO SE PASE EN PANTALLAS GRANDES */
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.modal-content h2 {
+  font-size: 1.4rem;
+  margin: 10px 0 20px 0;
+}
+
+.btn-modal-icon {
+  position: absolute;
+  bottom: 90px;   /* ✅ visible sin tapar imagen */
+  right: 20px;
+  font-size: 20px;
+}
+
 
 /* Ajustes visuales según pantalla */
 @media (min-width: 768px) {
