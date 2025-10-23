@@ -1,0 +1,36 @@
+<ion-content class="ion-padding login-content" fullscreen>
+  <div class="login-wrapper">
+    <ion-card class="login-card">
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Bienvenido</ion-card-title>
+        <ion-card-subtitle class="ion-text-center">
+          Ingresa para continuar
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form>
+          <ion-item>
+            <ion-label position="floating">Correo electrónico</ion-label>
+            <ion-input type="email"></ion-input>
+          </ion-item>
+          <ion-note color="danger">
+            Ingrese un correo válido
+          </ion-note>
+
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password"></ion-input>
+          </ion-item>
+          <ion-note color="danger">
+            Contraseña incorrecta, intente de nuevo.
+          </ion-note>
+
+          <ion-button expand="block" class="ion-margin-top" color="primary">
+            Ingresar
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
