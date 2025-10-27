@@ -7,5 +7,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <p>Ajuestes de usuario</p>
+  <h2>Selecciona un Tema:</h2>
+  <div class="color-wheel">
+  <div 
+    class="color-slice" 
+    *ngFor="let color of colors; let i = index"
+    [style.background]="color"
+    [style.transform]="getSliceTransform(i, colors.length)"
+    (click)="setColor(color)">
+  </div>
+</div>
+
 </ion-content>

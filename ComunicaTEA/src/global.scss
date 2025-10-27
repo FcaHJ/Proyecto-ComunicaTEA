@@ -35,3 +35,40 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+:root {
+  --app-background: #ffffff; /* color por defecto */
+  --app-text-color: #000000; /* color del texto */
+  --app-border-color: #000000;   
+}
+
+/* Aplica el color a todos los ion-content de la app */
+ion-content, ion-app, ion- page {
+  --background: var(--app-background) !important;
+  color: var(--app-text-color) !important;
+}
+
+ion-toolbar{
+   --background: var(--app-background) !important;
+   color: var(--app-text-color) !important;
+   box-shadow: none !important;
+}
+/* Botones */
+ion-button, ion-button.fill-clear, ion-button.fill-outline, ion-button.btn-menu[fill="outline"] {
+  color: var(--app-text-color) !important;
+  --border-color: var(--app-border-color) !important; /* borde */
+}
+
+/* Items (ion-item) */
+ion-item {
+  --background: var(--app-background) !important;
+  color: var(--app-text-color) !important;
+  --border-color: transparent !important;          /* quita línea inferior */
+  --border-style: none !important;
+  --box-shadow: none !important;                   /* quita sombra si la tiene */
+}
+
+ion-title, ion-label, h2{
+  color: var(--app-text-color) !important;
+}
+

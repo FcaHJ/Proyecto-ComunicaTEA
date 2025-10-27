@@ -1,0 +1,15 @@
+<div class="splash-content">
+  <div class="splash-wrapper">
+    <div class="splash-container">
+      <ion-icon 
+        *ngFor="let icon of puzzleIcons; let i = index"
+        name="extension-puzzle"
+        class="puzzle-icon"
+        [style.animation-delay]="icon.delay + 's'"
+        [style.color]="icon.color">
+      </ion-icon>
+    </div>
+
+    <h2 class="splash-text">ComunicaTEA</h2>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+.splash-content {
+  background-color: #ffffff !important;
+  color: black !important;
+}
+
+/* Centra todo (íconos + texto) en la pantalla */
+.splash-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centra vertical */
+  align-items: center;     /* centra horizontal */
+  height: 100vh;
+}
+
+.splash-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* espacio entre las piezas */
+}
+
+.puzzle-icon {
+  font-size: 50px;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+  100% { transform: translateY(0) rotate(-5deg); }
+}
+
+/* Animación para el texto */
+.splash-text {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.6rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 1.2s ease-out forwards;
+  animation-delay: 0.3s; /* aparece después del inicio de los iconos */
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

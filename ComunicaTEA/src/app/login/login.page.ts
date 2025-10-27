@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,11 @@ import { IonicModule } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
 
-  constructor() { }
+  constructor(private navCtrl: NavController) {}
+
+  goBack() {
+    this.navCtrl.back(); // vuelve a la página anterior
+  }
 
   ngOnInit() {
   }
