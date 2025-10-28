@@ -6,16 +6,24 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <h2>Selecciona un Tema:</h2>
+<ion-content class="content">
+  <ion-label>Selecciona un Tema:</ion-label>
   <div class="color-wheel">
-  <div 
-    class="color-slice" 
-    *ngFor="let color of colors; let i = index"
-    [style.background]="color"
-    [style.transform]="getSliceTransform(i, colors.length)"
-    (click)="setColor(color)">
+    <div 
+      class="color-slice" 
+      *ngFor="let color of colors; let i = index"
+      [style.background]="color"
+      [style.transform]="getSliceTransform(i, colors.length)"
+      (click)="setColor(color)">
+    </div>
   </div>
-</div>
 
+  <!--Agregar funcionalidad-->>
+  <ion-item>
+    <ion-label>Idioma:</ion-label>
+    <ion-select [value]="selectedLanguage" (ionChange)="changeLanguage($event)">
+      <ion-select-option value="es">Español</ion-select-option>
+      <ion-select-option value="en">English</ion-select-option>
+    </ion-select>
+  </ion-item>
 </ion-content>

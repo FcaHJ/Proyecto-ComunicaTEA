@@ -11,7 +11,7 @@
       </ion-header>
 
       <ion-content class="menu-content">
-        <ion-menu-toggle auto-hide="false">
+        <ion-menu-toggle auto-hide="true">
           <ion-button expand="block" fill="outline" class="btn-menu" [routerLink]="['/index']">
             <ion-icon name="home-outline" slot="start"></ion-icon>
             Home
@@ -28,15 +28,19 @@
       <ion-footer>
         <ion-toolbar>
           <ion-buttons vertical>
-            <ion-button fill="clear" expand="block" [routerLink]="['/login']">
-              <ion-icon name="log-in-outline" slot="start"></ion-icon>
-              Iniciar sesión
-            </ion-button>
+            <ion-menu-toggle auto-hide="true">
+              <ion-button fill="clear" expand="block" [routerLink]="['/login']">
+                <ion-icon name="log-in-outline" slot="start"></ion-icon>
+                Iniciar sesión
+              </ion-button>
+            </ion-menu-toggle>
 
-            <ion-button fill="clear" expand="block">
-              <ion-icon name="log-out-outline" slot="start"></ion-icon>
-              Cerrar sesión
-            </ion-button>
+            <ion-menu-toggle auto-hide="true">
+              <ion-button fill="clear" expand="block">
+                <ion-icon name="log-out-outline" slot="start"></ion-icon>
+                Cerrar sesión
+              </ion-button>
+            </ion-menu-toggle>
           </ion-buttons>
         </ion-toolbar>
       </ion-footer>

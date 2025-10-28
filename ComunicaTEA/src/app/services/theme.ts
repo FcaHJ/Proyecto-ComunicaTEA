@@ -7,6 +7,9 @@ import { Storage } from '@ionic/storage-angular';
 export class Theme {
   private _storage: Storage | null = null;
   private readonly COLOR_KEY = 'appBackgroundColor';
+  private readonly LANGUAGE_KEY = 'appLanguage';
+
+  selectedLanguage: string = 'es';
 
   constructor(private storage: Storage) { 
   }
@@ -50,9 +53,18 @@ async saveTheme(color: string) {
 
   async loadTheme() {
     if (!this._storage) return;
+    const lang = await this._storage?.get(this.LANGUAGE_KEY);
+    if (lang) this.selectedLanguage = lang;
+
     const savedColor = await this._storage.get(this.COLOR_KEY);
     if (savedColor) {
       this.applyColor(savedColor);
     }
+  }
+
+  async changeLanguage(lang: string) {
+    this.selectedLanguage = lang;
+    await this._storage?.set(this.LANGUAGE_KEY, lang);
+    console.log('Idioma cambiado a:', lang);
   }
 }

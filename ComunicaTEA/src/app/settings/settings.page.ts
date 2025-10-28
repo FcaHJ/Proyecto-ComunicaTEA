@@ -13,6 +13,8 @@ import { Theme } from '../services/theme';
 })
 export class SettingsPage implements OnInit {
 
+  selectedLanguage: string = 'es';
+
   colors: string[] = [
     '#ff0000', '#ff7f00', '#ffff00', '#7fff00', '#00ff00',
     '#00ff7f', '#00ffff', '#007fff', '#0000ff', '#7f00ff',
@@ -26,11 +28,16 @@ export class SettingsPage implements OnInit {
 
   setColor(color: string) {
   this.themeService.setBackgroundColor(color);
-}
+  }
 
-getSliceTransform(index: number, total: number): string {
-    const angle = (360 / total) * index;
-    return `rotate(${angle}deg) translate(100px) rotate(-${angle}deg)`;
+  getSliceTransform(index: number, total: number): string {
+      const angle = (360 / total) * index;
+      return `rotate(${angle}deg) translate(100px) rotate(-${angle}deg)`;
+  }
+
+  changeLanguage(event: any) {
+    const lang = event.detail.value;
+    this.themeService.changeLanguage(lang);
   }
  
 
