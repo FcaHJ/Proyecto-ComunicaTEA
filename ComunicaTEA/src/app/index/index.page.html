@@ -9,9 +9,9 @@
 <ion-content [fullscreen]="true">
   <!-- Categorías -->
   <div class="categorias">
-    <ion-chip 
-      *ngFor="let category of categories" 
-      (click)="selectCategory(category)" 
+    <ion-chip
+      *ngFor="let category of categories"
+      (click)="selectCategory(category)"
       [color]="selectedCategory === category ? 'primary' : 'medium'">
       <ion-label>{{ category }}</ion-label>
     </ion-chip>
@@ -22,9 +22,9 @@
     <ion-row>
       <ion-col size="6" size-md="4" *ngFor="let card of cards">
         <ion-card class="card-container"
-          *ngIf="!selectedCategory || card.category === selectedCategory"
-          (click)="openModal(card)">
-          
+          *ngIf="shouldShowCard(card)"
+          (click)="animateCard($event, card)">
+
           <ion-card-header>
             <ion-img [src]="card.image"></ion-img>
           </ion-card-header>
@@ -54,13 +54,13 @@
           <ion-icon name="close-circle"></ion-icon>
         </ion-button>
       </ion-buttons>
-      
+
       <div class="modal-content">
         <ion-img [src]="selectedCard?.image"></ion-img>
         <h2>{{ selectedCard?.description }}</h2>
 
         <ion-button fill="clear" class="btn-modal-icon">
-          <ion-icon name="volume-medium"></ion-icon>  
+          <ion-icon name="volume-medium"></ion-icon>
         </ion-button>
       </div>
     </ng-template>

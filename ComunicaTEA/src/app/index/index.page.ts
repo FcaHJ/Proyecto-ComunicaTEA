@@ -38,7 +38,7 @@ export class IndexPage implements OnInit {
     await this.cardService.setCards(this.cards);
   }
 
-  categories = ['Tecnología', 'Hogar', 'Deporte', 'Alimentación', 'Ocio'];
+  categories = ['Favoritos', 'Tecnología', 'Hogar', 'Deporte', 'Alimentación', 'Ocio'];
 
   selectCategory(category: string) {
     if (this.selectedCategory === category) {
@@ -58,5 +58,30 @@ export class IndexPage implements OnInit {
     this.isModalOpen = false;
     this.selectedCard = null;
   }
+
+
+  shouldShowCard(card: any): boolean {
+  if (!this.selectedCategory) return true;
+
+  if (this.selectedCategory === 'Favoritos') {
+    return card.fav;
+  }
+
+  return card.category === this.selectedCategory;
+  }
+
+
+
+  animateCard(event: Event, card: any) {
+  const element = (event.currentTarget as HTMLElement);
+  element.classList.add('clicked');
+
+  // abre el modal después de la animación
+  setTimeout(() => {
+    this.openModal(card);
+    element.classList.remove('clicked');
+  }, 150); // duración de la animación
+  }
+
 
 }
