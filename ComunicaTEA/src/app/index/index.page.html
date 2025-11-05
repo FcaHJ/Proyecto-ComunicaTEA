@@ -10,41 +10,43 @@
   <!-- Categorías -->
   <div class="categorias">
     <ion-chip
-      *ngFor="let category of categories"
-      (click)="selectCategory(category)"
-      [color]="selectedCategory === category ? 'primary' : 'medium'">
-      <ion-label>{{ category }}</ion-label>
-    </ion-chip>
+    *ngFor="let category of categories"
+    (click)="selectCategory(category)"
+    [color]="selectedCategory === category ? 'primary' : 'medium'">
+    <ion-label>{{ category }}</ion-label>
+  </ion-chip>
+</div>
+
+<div class="content">
+    <!-- Tarjetas -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-md="4" *ngFor="let card of cards">
+          <ion-card class="card-container"
+            *ngIf="shouldShowCard(card)"
+            (click)="animateCard($event, card)">
+  
+            <ion-card-header>
+              <ion-img [src]="card.image"></ion-img>
+            </ion-card-header>
+  
+            <ion-card-content class="description">
+              {{ card.description }}
+            </ion-card-content>
+  
+            <!-- botón favorito SIN bloquear el click de la card -->
+            <ion-button fill="clear" class="btn-fav" (click)="toggleFav(card); $event.stopPropagation();">
+              <ion-icon
+                [name]="card.fav ? 'heart' : 'heart-outline'"
+                [color]="card.fav ? 'danger' : 'medium'">
+              </ion-icon>
+            </ion-button>
+  
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
-
-  <!-- Tarjetas -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" size-md="4" *ngFor="let card of cards">
-        <ion-card class="card-container"
-          *ngIf="shouldShowCard(card)"
-          (click)="animateCard($event, card)">
-
-          <ion-card-header>
-            <ion-img [src]="card.image"></ion-img>
-          </ion-card-header>
-
-          <ion-card-content class="description">
-            {{ card.description }}
-          </ion-card-content>
-
-          <!-- botón favorito SIN bloquear el click de la card -->
-          <ion-button fill="clear" class="btn-fav" (click)="toggleFav(card); $event.stopPropagation();">
-            <ion-icon
-              [name]="card.fav ? 'heart' : 'heart-outline'"
-              [color]="card.fav ? 'danger' : 'medium'">
-            </ion-icon>
-          </ion-button>
-
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 
   <!-- MODAL -->
   <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">

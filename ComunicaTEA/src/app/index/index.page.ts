@@ -70,8 +70,6 @@ export class IndexPage implements OnInit {
   return card.category === this.selectedCategory;
   }
 
-
-
   animateCard(event: Event, card: any) {
   const element = (event.currentTarget as HTMLElement);
   element.classList.add('clicked');

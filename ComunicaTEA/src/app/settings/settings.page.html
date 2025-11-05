@@ -7,23 +7,37 @@
 </ion-header>
 
 <ion-content class="content">
-  <ion-label>Selecciona un Tema:</ion-label>
-  <div class="color-wheel">
-    <div 
-      class="color-slice" 
-      *ngFor="let color of colors; let i = index"
-      [style.background]="color"
-      [style.transform]="getSliceTransform(i, colors.length)"
-      (click)="setColor(color)">
+  <div class="div-content">
+    <ion-label>Selecciona un Tema:</ion-label>
+    <div class="color-wheel">
+      <div 
+        class="color-slice" 
+        *ngFor="let color of colors; let i = index"
+        [style.background]="color"
+        [style.transform]="getSliceTransform(i, colors.length)"
+        (click)="setColor(color)">
+      </div>
     </div>
-  </div>
 
-  <!--Agregar funcionalidad-->>
-  <ion-item>
-    <ion-label>Idioma:</ion-label>
-    <ion-select [value]="selectedLanguage" (ionChange)="changeLanguage($event)">
-      <ion-select-option value="es">Español</ion-select-option>
-      <ion-select-option value="en">English</ion-select-option>
-    </ion-select>
+    <ion-item lines="none">
+    <ion-label>Intensidad:</ion-label>
+    <ion-range 
+      min="-100" 
+      max="100" 
+      step="1" 
+      [(ngModel)]="intensity"
+      (ionChange)="adjustIntensity()"
+      pin="true">
+    </ion-range>
   </ion-item>
+  
+    <!--Agregar funcionalidad-->
+    <ion-item>
+      <ion-label>Idioma:</ion-label>
+      <ion-select>
+        <ion-select-option value="es">Español</ion-select-option>
+        <ion-select-option value="en">English</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
 </ion-content>

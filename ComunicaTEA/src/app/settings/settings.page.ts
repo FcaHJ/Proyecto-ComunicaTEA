@@ -13,6 +13,8 @@ import { Theme } from '../services/theme';
 })
 export class SettingsPage implements OnInit {
 
+  selectedColor: string = "ffffff";
+  intensity: number = 0;
   selectedLanguage: string = 'es';
 
   colors: string[] = [
@@ -26,19 +28,21 @@ export class SettingsPage implements OnInit {
   ngOnInit(){
   }
 
-  setColor(color: string) {
-  this.themeService.setBackgroundColor(color);
-  }
-
   getSliceTransform(index: number, total: number): string {
       const angle = (360 / total) * index;
       return `rotate(${angle}deg) translate(100px) rotate(-${angle}deg)`;
   }
 
-  changeLanguage(event: any) {
-    const lang = event.detail.value;
-    this.themeService.changeLanguage(lang);
+  setColor(color: string) {
+    this.selectedColor = color;
+    this.themeService.setBackgroundColor(color, this.intensity);
   }
+
+  adjustIntensity() {
+    this.themeService.setBackgroundColor(this.selectedColor, this.intensity);
+  }
+
+
  
 
 }

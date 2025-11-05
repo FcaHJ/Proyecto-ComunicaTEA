@@ -1,6 +1,6 @@
 <ion-app  *ngIf="!showSplash">
   <!-- Split Pane: el menú se mantiene abierto en tablet o más grande -->
-  <ion-split-pane contentId="main" when="md">
+  <ion-split-pane contentId="main">
 
     <!-- Menú lateral -->
     <ion-menu side="start" menuId="m1" contentId="main">
@@ -11,7 +11,7 @@
       </ion-header>
 
       <ion-content class="menu-content">
-        <ion-menu-toggle auto-hide="true">
+        <ion-menu-toggle>
           <ion-button expand="block" fill="outline" class="btn-menu" [routerLink]="['/index']">
             <ion-icon name="home-outline" slot="start"></ion-icon>
             Home
@@ -28,14 +28,14 @@
       <ion-footer>
         <ion-toolbar>
           <ion-buttons vertical>
-            <ion-menu-toggle auto-hide="true">
+            <ion-menu-toggle>
               <ion-button fill="clear" expand="block" [routerLink]="['/login']">
                 <ion-icon name="log-in-outline" slot="start"></ion-icon>
                 Iniciar sesión
               </ion-button>
             </ion-menu-toggle>
 
-            <ion-menu-toggle auto-hide="true">
+            <ion-menu-toggle>
               <ion-button fill="clear" expand="block">
                 <ion-icon name="log-out-outline" slot="start"></ion-icon>
                 Cerrar sesión
