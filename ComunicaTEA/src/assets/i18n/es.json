@@ -1,0 +1,9 @@
+{
+    "CATEGORIES_LIST": ["Favoritos", "Tecnología", "Hogar", "Deporte", "Alimentación", "Ocio"],
+    "CARDS_LIST": [
+        {"image": "assets/image/jugar.png", "description":"Jugar", "category": "Deporte"},
+        {"image": "assets/image/afuera.png", "description":"Afuera", "category": "Ocio"},
+        {"image": "assets/image/musica.png", "description":"Música", "category": "Ocio"},
+        {"image": "assets/image/comida.png", "description":"Almuerzo", "category": "Alimentación"}
+    ]
+}
