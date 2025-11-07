@@ -22,7 +22,7 @@ export class Theme {
     this.loadTheme();
   }
 
-  // 🔹 Aplica el color con brillo ajustado
+  // Aplica el color con brillo ajustado
   setBackgroundColor(color: string, intensity: number = 0) {
     const adjusted = this.adjustColorBrightness(color, intensity);
     this.applyColor(adjusted);
@@ -81,12 +81,21 @@ export class Theme {
     let g = parseInt(hex.substring(2, 4), 16);
     let b = parseInt(hex.substring(4, 6), 16);
 
-    // Si percent > 0 → aclarar, si < 0 → oscurecer
-    const factor = 1 + percent / 100;
+    // Si percent es positivo, aclaramos. Si es negativo, oscurecemos.
+  if (percent > 0) {
+    r = r + ((255 - r) * percent / 100);
+    g = g + ((255 - g) * percent / 100);
+    b = b + ((255 - b) * percent / 100);
+  } else {
+    r = r * (1 + percent / 100);
+    g = g * (1 + percent / 100);
+    b = b * (1 + percent / 100);
+  }
 
-    r = Math.min(255, Math.max(0, r * factor));
-    g = Math.min(255, Math.max(0, g * factor));
-    b = Math.min(255, Math.max(0, b * factor));
+  r = Math.min(255, Math.max(0, r));
+  g = Math.min(255, Math.max(0, g));
+  b = Math.min(255, Math.max(0, b));
+
 
     return `#${this.toHex(r)}${this.toHex(g)}${this.toHex(b)}`;
   }

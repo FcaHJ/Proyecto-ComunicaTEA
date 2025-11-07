@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SplashComponent } from './components/splash/splash.component';
 import { Storage } from '@ionic/storage-angular';
+import { Theme } from './services/theme';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent {
   isMobile: boolean = true;
   isLoggedIn = false; 
 
-  constructor(private platform: Platform, private storage: Storage) {
+  constructor(private platform: Platform, private storage: Storage, private theme: Theme) {
     this.isMobile = this.platform.width() < 768;
     this.init();
   }
@@ -26,7 +27,8 @@ export class AppComponent {
   }
 
   async init() {
-    await this.storage.create();
+    //await this.theme.loadTheme();
+    //await this.storage.create();
     const user = await this.storage.get('user');
     this.isLoggedIn = !!user; // true si ya hay usuario guardado
   }

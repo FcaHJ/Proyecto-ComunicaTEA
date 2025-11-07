@@ -26,6 +26,25 @@ export class SettingsPage implements OnInit {
   constructor(private themeService: Theme){}
 
   ngOnInit(){
+    // Cargar color e intensidad guardados al abrir la página
+    this.themeService['loadTheme'](); // aplica el tema actual
+
+    // Recuperar valores guardados desde el storage
+    this.themeService['_storage']?.get('appBackgroundColor').then((color) => {
+      if (color) this.selectedColor = color;
+    });
+
+    this.themeService['_storage']?.get('appColorIntensity').then((intensity) => {
+      if (intensity !== null && intensity !== undefined) {
+        this.intensity = intensity;
+      }
+    });
+
+    this.themeService['_storage']?.get('appLanguage').then((lang) => {
+      if (lang) {
+        this.selectedLanguage = lang;
+      }
+    });
   }
 
   getSliceTransform(index: number, total: number): string {
@@ -42,7 +61,10 @@ export class SettingsPage implements OnInit {
     this.themeService.setBackgroundColor(this.selectedColor, this.intensity);
   }
 
-
- 
+  changeLanguage(event: any) {
+  const lang = event.detail.value;
+  this.themeService.changeLanguage(lang);
+  this.selectedLanguage = lang;
+}
 
 }

@@ -13,6 +13,7 @@ import { Cards } from '../services/cards';
 })
 export class IndexPage implements OnInit {
   cards: any[] = [];
+  filteredCards: any[] = [];
   selectedCategory: string | null = null;
   isModalOpen = false;
   selectedCard: any = null;
@@ -28,10 +29,17 @@ export class IndexPage implements OnInit {
         {id:2, image: 'assets/image/afuera.png', description:'Afuera', category: 'Ocio', fav: false},
         {id:3, image: 'assets/image/musica.png', description:'Música', category: 'Ocio', fav: false},
         {id:4, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-      ];
+        /*{id:5, image: 'assets/image/pintar.png', description:'Pintar', category: 'Ocio', fav: false},
+        {id:6, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
+        {id:7, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
+        {id:8, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
+        {id:9, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
+        {id:10, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
+        {id:11, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},*/      ];
       await this.cardService.setCards(this.cards);
     }
-  }
+    this.filteredCards = this.cards;
+  } 
 
   async toggleFav(card : any){
     card.fav = !card.fav;
@@ -44,8 +52,10 @@ export class IndexPage implements OnInit {
     if (this.selectedCategory === category) {
     // Si ya está seleccionada, deseleccionamos
     this.selectedCategory = null;
+    this.filteredCards = this.cards;
   } else {
     this.selectedCategory = category;
+    this.filteredCards = this.cards.filter(c => this.shouldShowCard(c));
   }
   }
 
@@ -69,6 +79,8 @@ export class IndexPage implements OnInit {
 
   return card.category === this.selectedCategory;
   }
+
+
 
   animateCard(event: Event, card: any) {
   const element = (event.currentTarget as HTMLElement);

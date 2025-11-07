@@ -21,9 +21,8 @@
     <!-- Tarjetas -->
     <ion-grid>
       <ion-row>
-        <ion-col size="6" size-md="4" *ngFor="let card of cards">
+        <ion-col size="6" size-md="4" *ngFor="let card of filteredCards">
           <ion-card class="card-container"
-            *ngIf="shouldShowCard(card)"
             (click)="animateCard($event, card)">
   
             <ion-card-header>
