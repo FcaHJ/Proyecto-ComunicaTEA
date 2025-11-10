@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Cards } from '../services/cards';
+import { ModalController } from '@ionic/angular';
+import { CardViewModal } from '../modals/card-view/card-view.modal';
 
 @Component({
   selector: 'app-index',
@@ -18,7 +20,8 @@ export class IndexPage implements OnInit {
   isModalOpen = false;
   selectedCard: any = null;
 
-  constructor(private cardService: Cards) { }
+  constructor(private cardService: Cards,
+    private modalCtrl: ModalController) { }
 
   async ngOnInit() {
     this.cards = await this.cardService.getCards();
@@ -39,7 +42,7 @@ export class IndexPage implements OnInit {
       await this.cardService.setCards(this.cards);
     }
     this.filteredCards = this.cards;
-  } 
+  }
 
   async toggleFav(card : any){
     card.fav = !card.fav;
@@ -59,10 +62,17 @@ export class IndexPage implements OnInit {
   }
   }
 
-  openModal(card: any) {
-    this.selectedCard = card;
-    this.isModalOpen = true;
-  }
+
+async openModal(card: any) {
+  const modal = await this.modalCtrl.create({
+    component: CardViewModal,
+    cssClass: 'card-modal'
+  });
+
+  modal.componentProps = { card };
+
+  await modal.present();
+}
 
   closeModal() {
     this.isModalOpen = false;

@@ -1,0 +1,44 @@
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 20px;
+}
+
+
+.close-icon ion-icon {
+  font-size: 28px;
+  color: black;
+  padding: 10px;
+}
+
+.close-abs {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+
+.modal-content ion-img {
+  width: 90%;
+  max-width: 350px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.modal-content h2 {
+  font-size: 1.4rem;
+  margin: 10px 0 20px 0;
+}
+
+.btn-modal-icon {
+  position: absolute;
+  bottom: 90px;
+  right: 20px;
+  font-size: 20px;
+}
