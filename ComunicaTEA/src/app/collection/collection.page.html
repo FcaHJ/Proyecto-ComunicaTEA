@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/collections"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ collection?.name }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="openSelectModal()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list>
+    <ion-item *ngIf="collection?.cards.length === 0">
+      La colección está vacía.
+    </ion-item>
+
+    <ion-item *ngFor="let card of collection?.cards" (click)="openCard(card)">
+
+      <ion-thumbnail slot="start">
+        <img [src]="card.image">
+      </ion-thumbnail>
+
+      <ion-label>
+        {{ card.description }}
+        <p>{{ card.category }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+

@@ -17,4 +17,13 @@ export class Cards {
   clearCards() {
     return this.db.clear();
   }
+
+  // Colecciones
+  getCollections() {
+    return this.db.getCollections();
+  }
+
+  setCollections(collections: any[]) {
+    return this.db.setCollections(collections);
+  }
 }

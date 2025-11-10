@@ -4,19 +4,25 @@ import { Injectable } from '@angular/core';
 export class IndexedDBService {
 
   private dbName = 'CardsDB';
-  private storeName = 'cards';
 
   constructor() {
     this.openDB();
   }
 
   private openDB() {
-    const request = indexedDB.open(this.dbName, 1);
+    const request = indexedDB.open(this.dbName, 2); // versión 2
 
     request.onupgradeneeded = () => {
       const db = request.result;
-      if (!db.objectStoreNames.contains(this.storeName)) {
-        db.createObjectStore(this.storeName, { keyPath: 'id' });
+
+      // CARTAS
+      if (!db.objectStoreNames.contains('cards')) {
+        db.createObjectStore('cards', { keyPath: 'id' });
+      }
+
+      // COLECCIONES
+      if (!db.objectStoreNames.contains('collections')) {
+        db.createObjectStore('collections', { keyPath: 'id' });
       }
     };
   }
@@ -30,12 +36,15 @@ export class IndexedDBService {
     });
   }
 
-  // Obtener todas las cartas
+  // =========================
+  //  CARTAS
+  // =========================
+
   async getCards(): Promise<any[]> {
     const db = await this.getDB();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction([this.storeName], 'readonly');
-      const store = tx.objectStore(this.storeName);
+      const tx = db.transaction(['cards'], 'readonly');
+      const store = tx.objectStore('cards');
       const req = store.getAll();
 
       req.onsuccess = () => resolve(req.result);
@@ -43,12 +52,11 @@ export class IndexedDBService {
     });
   }
 
-  // Guardar o actualizar todas las cartas
-  async setCards(cards: any[]) {
+  async setCards(cards: any[]): Promise<void> {
     const db = await this.getDB();
-    return new Promise<void>((resolve, reject) => {
-      const tx = db.transaction([this.storeName], 'readwrite');
-      const store = tx.objectStore(this.storeName);
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['cards'], 'readwrite');
+      const store = tx.objectStore('cards');
 
       cards.forEach(c => store.put(c));
 
@@ -57,15 +65,45 @@ export class IndexedDBService {
     });
   }
 
-  // Limpiar todas las cartas
-  async clear() {
+  async clear(): Promise<void> {
     const db = await this.getDB();
-    return new Promise<void>((resolve, reject) => {
-      const tx = db.transaction([this.storeName], 'readwrite');
-      const store = tx.objectStore(this.storeName);
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['cards'], 'readwrite');
+      const store = tx.objectStore('cards');
       store.clear();
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
   }
+
+  // =========================
+  //  COLECCIONES
+  // =========================
+
+  async getCollections(): Promise<any[]> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['collections'], 'readonly');
+      const store = tx.objectStore('collections');
+      const req = store.getAll();
+
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async setCollections(collections: any[]): Promise<void> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['collections'], 'readwrite');
+      const store = tx.objectStore('collections');
+
+      collections.forEach(col => store.put(col));
+
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
 }
+
