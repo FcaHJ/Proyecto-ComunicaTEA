@@ -34,16 +34,12 @@
         <ion-toolbar>
           <ion-buttons vertical>
             <ion-menu-toggle>
-              <ion-button fill="clear" expand="block" [routerLink]="['/login']">
-                <ion-icon name="log-in-outline" slot="start"></ion-icon>
-                Iniciar sesión
-              </ion-button>
-            </ion-menu-toggle>
-
-            <ion-menu-toggle>
-              <ion-button fill="clear" expand="block">
-                <ion-icon name="log-out-outline" slot="start"></ion-icon>
-                Cerrar sesión
+              <ion-button fill="clear" expand="block" (click)="isLoggedIn ? logout() : goToLogin()">
+                <ion-icon 
+                  slot="start" 
+                  [name]="isLoggedIn ? 'log-out-outline' : 'log-in-outline'">
+                </ion-icon>
+                {{ isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión' }}
               </ion-button>
             </ion-menu-toggle>
           </ion-buttons>

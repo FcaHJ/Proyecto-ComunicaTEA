@@ -1,24 +1,16 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start" class="close-icon">
-      <ion-button (click)="close()">
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
-  <div class="modal-content">
+  <ion-buttons>
+    <ion-button (click)="close()" class="close-icon">
+      <ion-icon name="close-circle"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+ <div class="modal-content">
     <ion-img [src]="card?.image"></ion-img>
     <h2>{{ card?.description }}</h2>
-
-    <ion-button fill="clear" class="btn-modal-icon">
+    <ion-button fill="clear" class="btn-modal-icon" (click)="onCardClick(card?.id)">
       <ion-icon name="volume-medium"></ion-icon>
     </ion-button>
   </div>
-
 </ion-content>
 
 

@@ -8,11 +8,13 @@
   padding: 20px;
 }
 
-
-.close-icon ion-icon {
-  font-size: 28px;
-  color: black;
+.close-icon{
   padding: 10px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 1.8rem;
+  z-index: 10;
 }
 
 .close-abs {
@@ -28,17 +30,18 @@
   max-width: 350px;
   height: auto;
   object-fit: contain;
+  border-radius: 10px;
   margin-bottom: 1rem;
 }
 
 .modal-content h2 {
   font-size: 1.4rem;
-  margin: 10px 0 20px 0;
+  margin-top: 15px;
 }
 
 .btn-modal-icon {
   position: absolute;
-  bottom: 90px;
+  bottom: 70px;
   right: 20px;
-  font-size: 20px;
+  font-size: 1.6rem;
 }

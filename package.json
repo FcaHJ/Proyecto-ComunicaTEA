@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@capacitor-community/text-to-speech": "^6.1.0",
     "@capacitor/core": "^7.4.3",
     "@ionic/angular": "^8.7.5",
     "@ionic/angular-server": "^8.7.5",

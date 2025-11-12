@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +21,8 @@ export class LoginPage implements OnInit {
   constructor(
     private navCtrl: NavController, 
     private storage: Storage,
+    private auth: AuthService,
+    private router: Router
   ) {
     this.ngOnInit();
   }
@@ -32,20 +36,24 @@ export class LoginPage implements OnInit {
   }
 
   async loginUser() {
-  // Usuario de prueba
-    const testUser = {
-      email: 'admin@demo.com',
-      password: '123456',
-      name: 'Administrador de prueba',
-    };
+    try {
+      const user = await this.auth.login(this.email, this.password);
 
-    // Validar credenciales
-    if (this.email === testUser.email && this.password === testUser.password) {
-      await this.storage.set('user', testUser); // Guardar usuario en Storage
-      console.log("Inicio de sesion exitoso!")
-      this.goBack();
-    } else {
-      this.errorMessage = 'Correo o contraseña incorrectos.';
+      if (user) {
+        // redirigir según el rol
+        if (user.role === 'admin') {
+          this.router.navigate(['/usuarios']);
+        } else if (user.role === 'user') {
+          this.router.navigate(['/index']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      } else {
+        this.errorMessage = 'Usuario o contraseña incorrectos.';
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      this.errorMessage = 'Hubo un error al intentar iniciar sesión.';
     }
   }
 }

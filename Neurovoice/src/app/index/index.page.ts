@@ -5,6 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { Cards } from '../services/cards';
 import { ModalController } from '@ionic/angular';
 import { CardViewModal } from '../modals/card-view/card-view.modal';
+import { IndexedDBService } from '../services/indexeddb.service';
+import { Tts } from '../services/tts';
+
 
 @Component({
   selector: 'app-index',
@@ -20,36 +23,56 @@ export class IndexPage implements OnInit {
   isModalOpen = false;
   selectedCard: any = null;
 
-  constructor(private cardService: Cards,
-    private modalCtrl: ModalController) { }
+  constructor(
+    private cardService: Cards,
+    private modalCtrl: ModalController, 
+    private indexedDB: IndexedDBService,
+    private tts: Tts
+  ) { }
 
   async ngOnInit() {
     this.cards = await this.cardService.getCards();
+    try {
+      // Intentar obtener cartas desde IndexedDB
+      const storedCards = await this.indexedDB.getCards();
 
-    if (this.cards.length === 0){
-      this.cards = [
-        {id:1, image: 'assets/image/jugar.png', description:'Jugar', category: 'Deporte',fav: true},
-        {id:2, image: 'assets/image/afuera.png', description:'Afuera', category: 'Ocio', fav: false},
-        {id:3, image: 'assets/image/musica.png', description:'Música', category: 'Ocio', fav: false},
-        {id:4, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-        /*{id:5, image: 'assets/image/pintar.png', description:'Pintar', category: 'Ocio', fav: false},
-        {id:6, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-        {id:7, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-        {id:8, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-        {id:9, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-        {id:10, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},
-        {id:11, image: 'assets/image/comida.png', description:'Comida', category: 'Alimentación', fav: false},*/      ];
-      await this.cardService.setCards(this.cards);
+      // Versión local de los datos
+      const currentVersion = 2; // <- aumenta este número cuando modifiques algo
+      const storedVersion = Number(localStorage.getItem('cardsVersion')) || 0;
+
+      // Cargar cartas del JSON
+      const response = await fetch('assets/data/cards.json');
+      const jsonCards = await response.json();
+
+      // Si no hay cartas guardadas, cargar desde cards.json
+      if (!storedCards || storedCards.length !== jsonCards.length || storedVersion < currentVersion) {
+        console.log('Reemplazando cartas antiguas por las nuevas...');
+        // Guardar las cartas en IndexedDB para persistencia
+        await this.indexedDB.replaceAllCards(jsonCards);
+        localStorage.setItem('cardsVersion', currentVersion.toString());
+        this.cards = jsonCards;
+      } else {
+        // Si ya existen cartas guardadas, usarlas directamente
+        this.cards = storedCards;
+      }
+
+      // Asegurar que las cartas se muestren siempre
+      this.filteredCards = this.cards;
+
+      } catch (error) {
+        console.error('Error cargando cartas:', error);
+      }
     }
-    this.filteredCards = this.cards;
-  }
+
 
   async toggleFav(card : any){
     card.fav = !card.fav;
     await this.cardService.setCards(this.cards);
   }
 
-  categories = ['Favoritos', 'Tecnología', 'Hogar', 'Deporte', 'Alimentación', 'Ocio'];
+  categories = [
+    'Favoritos', 'Tecnología', 'Hogar', 'Deporte', 'Alimentación', 
+    'Ocio', 'Necesidades', 'Emociones', 'Relaciones', 'Animales'];
 
   selectCategory(category: string) {
     if (this.selectedCategory === category) {
@@ -101,6 +124,15 @@ async openModal(card: any) {
     this.openModal(card);
     element.classList.remove('clicked');
   }, 150); // duración de la animación
+  }
+
+  async onCardClick(cardId: number) {
+    console.log('Card ID clickeada:', cardId, this.selectedCard);
+    const card = await this.cardService.getCardById(cardId);
+    if (card) {
+      console.log('Texto a leer:', card.description);
+      this.tts.speak(card.description);
+    }
   }
 
 

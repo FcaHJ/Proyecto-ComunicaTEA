@@ -12,7 +12,8 @@
     <ion-chip
     *ngFor="let category of categories"
     (click)="selectCategory(category)"
-    [color]="selectedCategory === category ? 'primary' : 'medium'">
+    [color]="selectedCategory === category ? 'primary' : 'medium'"
+    [class.selected]="selectedCategory === category">
     <ion-label>{{ category }}</ion-label>
   </ion-chip>
 </div>
@@ -49,22 +50,6 @@
 
   <!-- MODAL -->
   <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
-    <ng-template>
-      <ion-buttons slot="start" class="close-icon">
-        <ion-button (click)="closeModal()">
-          <ion-icon name="close-circle"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-
-      <div class="modal-content">
-        <ion-img [src]="selectedCard?.image"></ion-img>
-        <h2>{{ selectedCard?.description }}</h2>
-
-        <ion-button fill="clear" class="btn-modal-icon">
-          <ion-icon name="volume-medium"></ion-icon>
-        </ion-button>
-      </div>
-    </ng-template>
   </ion-modal>
 
 </ion-content>

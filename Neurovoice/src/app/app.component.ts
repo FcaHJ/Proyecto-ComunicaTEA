@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicModule, Platform } from '@ionic/angular'
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { SplashComponent } from './components/splash/splash.component';
-import { Storage } from '@ionic/storage-angular';
 import { Theme } from './services/theme';
+import { Users } from './services/users';
+import { AuthService } from './services/auth-service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,12 @@ export class AppComponent {
   isMobile: boolean = true;
   isLoggedIn = false; 
 
-  constructor(private platform: Platform, private storage: Storage, private theme: Theme) {
+  constructor(private platform: Platform, 
+    private users: Users,
+    private auth: AuthService, 
+    private router: Router,
+    private theme: Theme //no eliminar
+   ) {
     this.isMobile = this.platform.width() < 768;
     this.init();
   }
@@ -28,15 +34,18 @@ export class AppComponent {
 
   async init() {
     //await this.theme.loadTheme();
-    //await this.storage.create();
-    const user = await this.storage.get('user');
-    this.isLoggedIn = !!user; // true si ya hay usuario guardado
+    await this.users.loadUsers();
+    this.isLoggedIn = this.auth.isLoggedIn();
   }
 
   async logout() {
-    console.log("Cerro su sesion")
-    await this.storage.remove('user');
+    console.log("Cerro su sesion");
+    this.auth.logout();
     this.isLoggedIn = false;
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 
   // método para actualizar el login cuando haces login desde login.page
