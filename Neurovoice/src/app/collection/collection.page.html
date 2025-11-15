@@ -34,6 +34,10 @@
         {{ card.description }}
         <p>{{ card.category }}</p>
       </ion-label>
+
+      <ion-button color="danger" fill="clear" slot="end" (click)="removeCard(card.id); $event.stopPropagation()">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 

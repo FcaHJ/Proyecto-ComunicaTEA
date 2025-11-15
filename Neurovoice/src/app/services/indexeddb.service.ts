@@ -132,7 +132,7 @@ export class IndexedDBService {
   }
 
   async getCardById(id: number | string): Promise<any> {
-    const db = await this.getDB(); 
+    const db = await this.getDB();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(['cards'], 'readonly');
       const store = tx.objectStore('cards');
@@ -172,6 +172,21 @@ export class IndexedDBService {
       tx.onerror = () => reject(tx.error);
     });
   }
+
+  async deleteCollection(id: number | string): Promise<void> {
+  const db = await this.getDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(['collections'], 'readwrite');
+    const store = tx.objectStore('collections');
+
+    store.delete(id);
+
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+  }
+
+
 
 }
 

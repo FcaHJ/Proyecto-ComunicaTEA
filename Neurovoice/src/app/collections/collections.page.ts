@@ -30,7 +30,7 @@ export class CollectionsPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.collections = await this.cardService.getCollections();
+    await this.loadCollections();
   }
 
   async createCollection() {
@@ -72,13 +72,49 @@ export class CollectionsPage implements OnInit {
 
   if (!col) return;
 
-  if (col.cards.length >= 10) {
-    alert('Esta colección ya tiene el máximo de 10 cartas.');
+  if (col.cards.length >= 5) {
+    alert('Esta colección ya tiene el máximo de 5 cartas.');
     return;
   }
 
   col.cards.push(card);
   await this.cardService.setCollections(collections);
   }
+
+  async deleteCollection(id: number) {
+
+  const alert = await this.alertCtrl.create({
+    header: 'Eliminar colección',
+    message: '¿Seguro que deseas eliminar esta colección?',
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'Eliminar',
+        role: 'destructive',
+        handler: async () => {
+          await this.cardService.deleteCollection(id);
+          this.collections = this.collections.filter(c => c.id !== id);
+        }
+      }
+    ]
+  });
+
+  await alert.present();
+  }
+
+  ionViewWillEnter() {
+  this.loadCollections();
+  }
+
+  async loadCollections() {
+  this.collections = await this.cardService.getCollections();
+  }
+
+
+
+
 
 }

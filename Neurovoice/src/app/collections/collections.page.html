@@ -17,17 +17,21 @@
 <ion-content>
 
   <ion-list>
-    <ion-item *ngFor="let col of collections" [routerLink]="['/collection', col.id]">
-      <ion-label>
+    <ion-item *ngFor="let col of collections">
+
+      <ion-label [routerLink]="['/collection', col.id]">
         {{ col.name }}
-        <p>{{ col.cards.length }} / 10 cartas</p>
+        <p>{{ col.cards.length }} / 5 cartas</p>
       </ion-label>
 
-      <ion-button fill="clear" slot="end">
-        <ion-icon name="arrow-forward-outline"></ion-icon>
+      <ion-button fill="clear" slot="end" color="danger"
+                  (click)="deleteCollection(col.id); $event.stopPropagation()">
+        <ion-icon name="trash-outline"></ion-icon>
       </ion-button>
+
     </ion-item>
   </ion-list>
 
 </ion-content>
+
 

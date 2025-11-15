@@ -9,7 +9,7 @@ export class Cards {
   getCards() {
     return this.db.getCards();
   }
-  
+
   setCards(cards: any[]) {
     return this.db.setCards(cards);
   }
@@ -29,6 +29,11 @@ export class Cards {
 
   getCardById(id: number | string) {
   return this.db.getCardById(id);
-}
+  }
+
+  deleteCollection(id: number | string) {
+  return this.db.deleteCollection(id);
+  }
+
 
 }
