@@ -14,7 +14,7 @@ import { AuthService } from '../services/auth-service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class LoginPage implements OnInit {
-  email: string = '';
+  username: string = '';
   password: string = '';
   errorMessage: string = '';
 
@@ -37,16 +37,14 @@ export class LoginPage implements OnInit {
 
   async loginUser() {
     try {
-      const user = await this.auth.login(this.email, this.password);
+      const user = await this.auth.login(this.username, this.password);
 
       if (user) {
         // redirigir según el rol
         if (user.role === 'admin') {
-          this.router.navigate(['/usuarios']);
+          this.router.navigate(['/index']);
         } else if (user.role === 'user') {
           this.router.navigate(['/index']);
-        } else {
-          this.router.navigate(['/home']);
         }
       } else {
         this.errorMessage = 'Usuario o contraseña incorrectos.';

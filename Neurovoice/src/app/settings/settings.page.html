@@ -1,13 +1,17 @@
-<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button menu= "m1"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
-<ion-content class="content">
+<ion-content class="content" [fullscreen]="true">
   <div class="div-content">
+    <!--div class="div-user">
+      <ion-icon name="person-circle-outline" style="font-size:32px; margin-right:8px;"></ion-icon>
+      <ion-label style="font-size:14px;">
+        {{ user?.username || 'Invitado' }}
+      </ion-label>
+    </div-->
     <ion-label>Selecciona un Tema:</ion-label>
     <div class="color-wheel">
       <div 
@@ -20,16 +24,16 @@
     </div>
 
     <ion-item lines="none">
-    <ion-label>Intensidad:</ion-label>
-    <ion-range 
-      min="-100" 
-      max="100" 
-      step="1" 
-      [(ngModel)]="intensity"
-      (ionChange)="adjustIntensity()"
-      pin="true">
-    </ion-range>
-  </ion-item>
+      <ion-label>Intensidad:</ion-label>
+      <ion-range 
+        min="-100" 
+        max="100" 
+        step="1" 
+        [(ngModel)]="intensity"
+        (ionChange)="adjustIntensity()"
+        pin="true">
+      </ion-range>
+    </ion-item>
   
     <!--Agregar funcionalidad-->
     <ion-item>

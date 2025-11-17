@@ -6,6 +6,7 @@ import { SplashComponent } from './components/splash/splash.component';
 import { Theme } from './services/theme';
 import { Users } from './services/users';
 import { AuthService } from './services/auth-service';
+import { AlertController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +22,15 @@ export class AppComponent {
     private users: Users,
     private auth: AuthService, 
     private router: Router,
-    private theme: Theme //no eliminar
+    private theme: Theme, //no eliminar
+    private alertController: AlertController
    ) {
     this.isMobile = this.platform.width() < 768;
-    this.init();
+    this.auth.isLoggedIn$.subscribe(state => {
+      console.log("Cambio detectado -> isLoggedIn:", state);
+      this.isLoggedIn = state;
+
+    });
   }
 
   showSplash = true;
@@ -33,23 +39,32 @@ export class AppComponent {
   }
 
   async init() {
-    //await this.theme.loadTheme();
-    await this.users.loadUsers();
-    this.isLoggedIn = this.auth.isLoggedIn();
   }
 
   async logout() {
-    console.log("Cerro su sesion");
-    this.auth.logout();
-    this.isLoggedIn = false;
-  }
+  const alert = await this.alertController.create({
+    header: 'Cerrar sesión',
+    message: '¿Seguro que quiere cerrar sesión?',
+    buttons: [
+      {
+        text: 'No',
+        role: 'cancel'
+      },
+      {
+        text: 'Sí',
+        handler: () => {
+          this.auth.logout();
+          console.log("Cerró su sesión");
+        }
+      }
+    ]
+  });
+
+  await alert.present();
+}
 
   goToLogin() {
     this.router.navigate(['/login']);
   }
 
-  // método para actualizar el login cuando haces login desde login.page
-  updateLoginStatus(status: boolean) {
-    this.isLoggedIn = status;
-  }
 }

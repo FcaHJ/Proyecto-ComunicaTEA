@@ -82,44 +82,6 @@ export class IndexedDBService {
     });
   }
 
-    async getUsers(): Promise<any[]> {
-    const db = await this.getDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(['users'], 'readonly');
-      const store = tx.objectStore('users');
-      const req = store.getAll();
-
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-  }
-
-  async setUsers(users: any[]): Promise<void> {
-    const db = await this.getDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(['users'], 'readwrite');
-      const store = tx.objectStore('users');
-
-      users.forEach(c => store.put(c));
-
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
-  }
-
-
-  async replaceAllUsers(users: any[]): Promise<void> {
-    const db = await this.getDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(['users'], 'readwrite');
-      const store = tx.objectStore('users');
-      store.clear(); // borra los anteriores
-      users.forEach(u => store.put(u));
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
-  }
-
   async clear(): Promise<void> {
     const db = await this.getDB();
     return new Promise((resolve, reject) => {
@@ -186,7 +148,58 @@ export class IndexedDBService {
   });
   }
 
+  // =========================
+  //  USUARIOS
+  // =========================
 
+  async getUsers(): Promise<any[]> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['users'], 'readonly');
+      const store = tx.objectStore('users');
+      const req = store.getAll();
+
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async setUsers(users: any[]): Promise<void> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['users'], 'readwrite');
+      const store = tx.objectStore('users');
+
+      users.forEach(c => store.put(c));
+
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async replaceAllUsers(users: any[]): Promise<void> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['users'], 'readwrite');
+      const store = tx.objectStore('users');
+      store.clear(); // borra los anteriores
+      users.forEach(u => store.put(u));
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async getUserById(id: number | string): Promise<any> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['users'], 'readonly');
+      const store = tx.objectStore('users');
+      const req = store.get(id);
+
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
 
 }
 

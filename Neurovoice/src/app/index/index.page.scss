@@ -93,6 +93,11 @@ ion-chip.selected {
   transition: all 0.2s ease;
 }
 
+ion-chip ion-label {
+  color: gray !important;
+}
+
+
 /* Ajustes visuales según pantalla */
 @media (min-width: 768px) {
   ion-card.placeholder-card {

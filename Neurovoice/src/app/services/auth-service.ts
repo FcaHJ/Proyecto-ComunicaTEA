@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 import { IndexedDBService } from './indexeddb.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+   private loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
+   currentUser$ = this.loggedIn$.asObservable();
+
   constructor(private db: IndexedDBService) {
     this.loadInitialUsers();
+
+    const saved = localStorage.getItem('loggedUser');
+    if (saved) this.loggedIn$.next(JSON.parse(saved));
+  }
+
+  get isLoggedIn$() {
+    return this.loggedIn$.asObservable();
   }
 
   private async loadInitialUsers() {
@@ -18,15 +30,18 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(username: string, password: string): Promise<any> {
     const users = await this.db.getUsers();
 
     const user = users.find(
-      (u: any) => u.email === email && u.password === password
+      (u: any) => u.username === username && u.password === password
     );
 
     if (user) {
       localStorage.setItem('loggedUser', JSON.stringify(user));
+      console.log("Usuario logeado correctamente: ",user );
+      this.loggedIn$.next(true);
+
       return user;
     }
     return null;
@@ -34,6 +49,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('loggedUser');
+    this.loggedIn$.next(false);
   }
 
   getCurrentUser() {

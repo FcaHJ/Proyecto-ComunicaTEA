@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Theme } from '../services/theme';
+import { AuthService } from '../services/auth-service';
 
 @Component({
   selector: 'app-settings',
@@ -16,6 +17,7 @@ export class SettingsPage implements OnInit {
   selectedColor: string = "ffffff";
   intensity: number = 0;
   selectedLanguage: string = 'es';
+  user: any = null;
 
   colors: string[] = [
     '#ff0000', '#ff7f00', '#ffff00', '#7fff00', '#00ff00',
@@ -23,9 +25,13 @@ export class SettingsPage implements OnInit {
     '#ff00ff', '#ff007f', '#ffffff', '#000000'
   ];
 
-  constructor(private themeService: Theme){}
+  constructor(private themeService: Theme, private auth: AuthService){}
 
   ngOnInit(){
+      this.auth.currentUser$.subscribe(user => {
+        this.user = user;
+    });
+
     // Cargar color e intensidad guardados al abrir la página
     this.themeService['loadTheme'](); // aplica el tema actual
 
