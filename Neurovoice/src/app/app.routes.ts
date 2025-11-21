@@ -9,26 +9,31 @@ export const routes: Routes = [
 
   {
     path: 'index',
-    loadComponent: () => import('./index/index.page').then(m => m.IndexPage)
+    loadComponent: () => import('./pages/index/index.page').then(m => m.IndexPage)
   },
 
   {
     path: 'settings',
-    loadComponent: () => import('./settings/settings.page').then( m => m.SettingsPage)
+    loadComponent: () => import('./pages/settings/settings.page').then( m => m.SettingsPage)
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'collections',
-    loadComponent: () => import('./collections/collections.page').then(m => m.CollectionsPage)
+    loadComponent: () => import('./pages/collections/collections.page').then(m => m.CollectionsPage)
   },
 
   {
     path: 'collection/:id',
-    loadComponent: () => import('./collection/collection.page').then(m => m.CollectionPage)
+    loadComponent: () => import('./pages/collection/collection.page').then(m => m.CollectionPage)
+  },
+  {
+    path: 'daily-stats',
+    loadComponent: () => import('./pages/daily-stats/daily-stats.page').then( m => m.DailyStatsPage)
   }
+
 
 
 ];

@@ -10,7 +10,7 @@ export class IndexedDBService {
   }
 
   private openDB() {
-    const request = indexedDB.open(this.dbName, 3); // versión 2
+    const request = indexedDB.open(this.dbName, 6); //se cambia cada vez que se realize un cambio en el indexedDB
 
     request.onupgradeneeded = () => {
       const db = request.result;
@@ -28,6 +28,11 @@ export class IndexedDBService {
       //USUARIOS
       if (!db.objectStoreNames.contains('users')) {
         db.createObjectStore('users', { keyPath: 'id' });
+      }
+
+      //ESTADISTICAS DIARIAS
+      if (!db.objectStoreNames.contains('dailyStats')) {
+        db.createObjectStore('dailyStats', { keyPath: 'id' }); 
       }
     };
   }
@@ -197,6 +202,84 @@ export class IndexedDBService {
       const req = store.get(id);
 
       req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  // =========================
+  // ESTADISTICAS (Uso dirio de tarjetas)
+  // =========================
+
+  async saveDailyCardUsage(card: any): Promise<void> {
+    const db = await this.getDB();
+    const today = new Date().toISOString().substring(0, 10); // "2025-11-21"
+
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['dailyStats'], 'readwrite');
+      const store = tx.objectStore('dailyStats');
+
+      const getReq = store.get(today);
+
+      getReq.onsuccess = () => {
+        let daily = getReq.result;
+
+        // Si no existe el día -> crear
+        if (!daily) {
+          daily = {
+            id: today,
+            date: today,
+            cards: {}
+          };
+        }
+
+        // Si no existe la carta -> crear
+        if (!daily.cards[card.id]) {
+          daily.cards[card.id] = {
+            image: card.image,
+            title: card.description,
+            count: 0
+          };
+        }
+
+        // Sumar uso
+        daily.cards[card.id].count++;
+
+        // Guardar
+        store.put(daily);
+        tx.oncomplete = () => resolve();
+      };
+
+      getReq.onerror = () => reject(getReq.error);
+    });
+  }
+
+  async getTodayStats(): Promise<any[]> {
+    const db = await this.getDB();
+    const today = new Date().toISOString().substring(0, 10);
+
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['dailyStats'], 'readonly');
+      const store = tx.objectStore('dailyStats');
+      const req = store.get(today);
+
+      req.onsuccess = () => {
+        if (!req.result) resolve([]);
+        else resolve(Object.values(req.result.cards));
+      };
+
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  // MÉTODOS DE DEBUG ÚTILES
+  async getAllDailyRecords(): Promise<any[]> {
+    const db = await this.getDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(['dailyStats'], 'readonly');
+      const store = tx.objectStore('dailyStats');
+      const req = store.getAll();
+
+      req.onsuccess = () => resolve(req.result || []);
       req.onerror = () => reject(req.error);
     });
   }

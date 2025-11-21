@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Cards } from '../services/cards';
+import { Cards } from '../../services/cards';
 import { ModalController } from '@ionic/angular';
-import { CardViewModal } from '../modals/card-view/card-view.modal';
-import { IndexedDBService } from '../services/indexeddb.service';
-import { Tts } from '../services/tts';
+import { CardViewModal } from '../../modals/card-view/card-view.modal';
+import { IndexedDBService } from '../../services/indexeddb.service';
 
 
 @Component({
@@ -27,7 +26,7 @@ export class IndexPage implements OnInit {
     private cardService: Cards,
     private modalCtrl: ModalController, 
     private indexedDB: IndexedDBService,
-    private tts: Tts
+    private db: IndexedDBService
   ) { }
 
   async ngOnInit() {
@@ -37,7 +36,7 @@ export class IndexPage implements OnInit {
       const storedCards = await this.indexedDB.getCards();
 
       // Versión local de los datos
-      const currentVersion = 2; // <- aumenta este número cuando modifiques algo
+      const currentVersion = 3; // <- aumenta este número cuando modifiques algo
       const storedVersion = Number(localStorage.getItem('cardsVersion')) || 0;
 
       // Cargar cartas del JSON
@@ -115,7 +114,7 @@ async openModal(card: any) {
 
 
 
-  animateCard(event: Event, card: any) {
+  async animateCard(event: Event, card: any) {
   const element = (event.currentTarget as HTMLElement);
   element.classList.add('clicked');
 
@@ -124,15 +123,10 @@ async openModal(card: any) {
     this.openModal(card);
     element.classList.remove('clicked');
   }, 150); // duración de la animación
-  }
 
-  async onCardClick(cardId: number) {
-    console.log('Card ID clickeada:', cardId, this.selectedCard);
-    const card = await this.cardService.getCardById(cardId);
-    if (card) {
-      console.log('Texto a leer:', card.description);
-      this.tts.speak(card.description);
-    }
+  // 🔥 GUARDAR ESTADÍSTICAS
+  await this.db.saveDailyCardUsage(card);
+  const today = await this.db.getAllDailyRecords();
   }
 
 
