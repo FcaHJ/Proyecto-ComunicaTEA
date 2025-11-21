@@ -9,6 +9,9 @@ export class Theme {
   private readonly COLOR_KEY = 'appBackgroundColor';
   private readonly LANGUAGE_KEY = 'appLanguage';
   private readonly INTENSITY_KEY = 'appColorIntensity';
+  private readonly VOICE_GENDER_KEY = 'voiceGender';
+  private readonly VOICE_TONE_KEY = 'voiceTone';
+
 
 
   selectedLanguage: string = 'es';
@@ -71,6 +74,22 @@ export class Theme {
     this.selectedLanguage = lang;
     await this._storage?.set(this.LANGUAGE_KEY, lang);
     console.log('Idioma cambiado a:', lang);
+  }
+
+  async setVoiceGender(gender: string) {
+    await this._storage?.set(this.VOICE_GENDER_KEY, gender);
+  }
+
+  async getVoiceGender(): Promise<string | null> {
+    return await this._storage?.get(this.VOICE_GENDER_KEY);
+  }
+
+  async setVoiceTone(tone: string) {
+    await this._storage?.set(this.VOICE_TONE_KEY, tone);
+  }
+
+  async getVoiceTone(): Promise<string | null> {
+    return await this._storage?.get(this.VOICE_TONE_KEY);
   }
 
   // 🔹 Ajusta brillo del color base

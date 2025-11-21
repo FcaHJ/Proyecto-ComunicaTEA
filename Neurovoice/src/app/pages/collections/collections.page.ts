@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Cards } from '../services/cards';
+import { Cards } from '../../services/cards';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 

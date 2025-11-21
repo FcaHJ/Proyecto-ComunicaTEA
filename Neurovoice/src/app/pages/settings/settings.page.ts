@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Theme } from '../services/theme';
-import { AuthService } from '../services/auth-service';
+import { Theme } from '../../services/theme';
+import { AuthService } from '../../services/auth-service';
+import { Tts, VoiceGender, VoiceTone } from '../../services/tts';
 
 @Component({
   selector: 'app-settings',
@@ -18,6 +19,9 @@ export class SettingsPage implements OnInit {
   intensity: number = 0;
   selectedLanguage: string = 'es';
   user: any = null;
+  voiceGender: VoiceGender = 'male';
+  voiceTone: VoiceTone = 'neutral';
+
 
   colors: string[] = [
     '#ff0000', '#ff7f00', '#ffff00', '#7fff00', '#00ff00',
@@ -25,7 +29,7 @@ export class SettingsPage implements OnInit {
     '#ff00ff', '#ff007f', '#ffffff', '#000000'
   ];
 
-  constructor(private themeService: Theme, private auth: AuthService){}
+  constructor(private themeService: Theme, private auth: AuthService, private tts: Tts){}
 
   ngOnInit(){
       this.auth.currentUser$.subscribe(user => {
@@ -46,11 +50,16 @@ export class SettingsPage implements OnInit {
       }
     });
 
-    this.themeService['_storage']?.get('appLanguage').then((lang) => {
-      if (lang) {
-        this.selectedLanguage = lang;
-      }
+    // Cargar ajustes de voz
+    this.themeService['_storage']?.get('voiceGender').then(g => {
+      if (g) this.voiceGender = g;
     });
+
+    this.themeService['_storage']?.get('voiceTone').then(t => {
+      if (t) this.voiceTone = t;
+    });
+
+
   }
 
   getSliceTransform(index: number, total: number): string {
@@ -67,10 +76,16 @@ export class SettingsPage implements OnInit {
     this.themeService.setBackgroundColor(this.selectedColor, this.intensity);
   }
 
-  changeLanguage(event: any) {
-  const lang = event.detail.value;
-  this.themeService.changeLanguage(lang);
-  this.selectedLanguage = lang;
+  async changeVoiceGender(event: any) {
+  this.voiceGender = event.detail.value;
+  await this.themeService['_storage']?.set('voiceGender', this.voiceGender);
 }
+
+async changeVoiceTone(event: any) {
+  this.voiceTone = event.detail.value;
+  await this.themeService['_storage']?.set('voiceTone', this.voiceTone);
+}
+
+
 
 }

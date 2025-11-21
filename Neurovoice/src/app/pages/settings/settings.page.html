@@ -35,13 +35,30 @@
       </ion-range>
     </ion-item>
   
-    <!--Agregar funcionalidad-->
+    <!--Agregar funcionalidad>
     <ion-item>
       <ion-label>Idioma:</ion-label>
       <ion-select [(ngModel)]="selectedLanguage" (ionChange)="changeLanguage($event)">
         <ion-select-option value="es">Español</ion-select-option>
         <ion-select-option value="en">Ingles</ion-select-option>
       </ion-select>
+    </ion-item-->
+    <ion-item>
+      <ion-label>Género de voz</ion-label>
+      <ion-select [value]="voiceGender" (ionChange)="changeVoiceGender($event)">
+        <ion-select-option value="female">Femenina</ion-select-option>
+        <ion-select-option value="male">Masculina</ion-select-option>
+      </ion-select>
     </ion-item>
+
+    <ion-item>
+      <ion-label>Tonalidad</ion-label>
+      <ion-select [value]="voiceTone" (ionChange)="changeVoiceTone($event)">
+        <ion-select-option value="happy">Alegre</ion-select-option>
+        <ion-select-option value="calm">Calmado</ion-select-option>
+        <ion-select-option value="neutral">Neutro</ion-select-option>
+      </ion-select>
+    </ion-item>
+
   </div>
 </ion-content>

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-login',

@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Cards } from '../services/cards';
-import { SelectCardModal } from '../modals/select-card/select-card.modal';
-import { CardViewModal } from '../modals/card-view/card-view.modal';
+import { Cards } from '../../services/cards';
+import { SelectCardModal } from '../../modals/select-card/select-card.modal';
+import { CardViewModal } from '../../modals/card-view/card-view.modal';
 import { AlertController } from '@ionic/angular';
 
 
