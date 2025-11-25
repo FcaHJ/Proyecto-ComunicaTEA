@@ -1,61 +1,69 @@
-<ion-app  *ngIf="!showSplash">
-  <!-- Split Pane: el menú se mantiene abierto en tablet o más grande -->
-  <ion-split-pane contentId="main">
+<ion-app *ngIf="!showSplash">
 
-    <!-- Menú lateral -->
-    <ion-menu side="start" menuId="m1" contentId="main">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menú</ion-title>
-        </ion-toolbar>
-      </ion-header>
+  <!-- Menú lateral -->
+  <ion-menu side="start" menuId="m1" contentId="main">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menú</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-      <ion-content class="menu-content">
-        <ion-menu-toggle>
-          <ion-button expand="block" fill="outline" class="btn-menu" [routerLink]="['/index']">
+    <ion-content class="menu-content">
+
+      <ion-list>
+
+        <!-- Inicio -->
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="['/index']">
             <ion-icon name="home-outline" slot="start"></ion-icon>
-            Inicio
-          </ion-button>
-
-          <ion-button expand="block" fill="outline" class="btn-menu" [routerLink]="['/settings']">
-            <ion-icon name="settings-outline" slot="start"></ion-icon>
-            Ajustes
-          </ion-button>
-
-          <ion-button expand="block" fill="outline" class="btn-menu" [routerLink]="['/collections']">
-            <ion-icon name="bookmark-outline" slot=start></ion-icon>
-            Colecciones
-          </ion-button>
-
-          <ion-button expand="block" fill="outline" class="btn-menu" [routerLink]="['/daily-stats']">
-            <ion-icon name="time-outline" slot="start"></ion-icon>
-            Historial de uso
-          </ion-button>
+            <ion-label>Inicio</ion-label>
+          </ion-item>
         </ion-menu-toggle>
-      </ion-content>
 
-      <!--Inicio/Cierre de sesion-->
-      <ion-footer>
-        <ion-toolbar>
-          <ion-buttons vertical>
-            <ion-menu-toggle>
-              <ion-button fill="clear" expand="block" (click)="isLoggedIn ? logout() : goToLogin()">
-                <ion-icon 
-                  slot="start" 
-                  [name]="isLoggedIn ? 'log-out-outline' : 'log-in-outline'">
-                </ion-icon>
-                {{ isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión' }}
-              </ion-button>
-            </ion-menu-toggle>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-footer>
-    </ion-menu>
+        <!-- Ajustes -->
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="['/settings']">
+            <ion-icon name="settings-outline" slot="start"></ion-icon>
+            <ion-label>Ajustes</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
 
-    <!-- Contenedor principal de la app -->
-    <ion-router-outlet id="main"></ion-router-outlet>
-  </ion-split-pane>
+        <!-- Colecciones -->
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="['/collections']">
+            <ion-icon name="bookmark-outline" slot="start"></ion-icon>
+            <ion-label>Colecciones</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <!-- Historial de uso -->
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button [routerLink]="['/daily-stats']">
+            <ion-icon name="time-outline" slot="start"></ion-icon>
+            <ion-label>Historial de uso</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+      </ion-list>
+    </ion-content>
+
+    <!-- Inicio/Cierre de sesión -->
+    <ion-footer>
+      <ion-toolbar>
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button (click)="isLoggedIn ? logout() : goToLogin()">
+            <ion-icon slot="start" [name]="isLoggedIn ? 'log-out-outline' : 'log-in-outline'"></ion-icon>
+            <ion-label>
+              {{ isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión' }}
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-menu>
+
+  <!-- Contenedor principal -->
+  <ion-router-outlet id="main"></ion-router-outlet>
 </ion-app>
-
 
 <app-splash *ngIf="showSplash" (finished)="hideSplash()"></app-splash>

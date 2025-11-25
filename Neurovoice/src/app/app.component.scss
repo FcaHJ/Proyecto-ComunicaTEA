@@ -13,3 +13,18 @@
   --padding-end: 0;
 }
 
+/* Eliminar líneas entre los items */
+ion-list {
+  --ion-item-border-color: transparent;
+  --border-style: none;
+}
+
+ion-item {
+  --inner-border-width: 0;
+  --border-width: 0;
+  --border-color: transparent;
+  --background: transparent;
+}
+
+
+

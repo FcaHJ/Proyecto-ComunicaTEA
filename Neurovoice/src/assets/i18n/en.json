@@ -1,9 +1,0 @@
-{
-    "CATEGORIES_LIST": ["Favorites", "Technology", "Home", "Sports", "Food", "Leisure"],
-    "CARDS_LIST": [
-        {"image": "assets/image/jugar.png", "description":"Play", "category": "Sports"},
-        {"image": "assets/image/afuera.png", "description":"Outside", "category": "Leisure"},
-        {"image": "assets/image/musica.png", "description":"Music", "category": "Leisure"},
-        {"image": "assets/image/comida.png", "description":"Lunch", "category": "Food"}
-    ]
-}

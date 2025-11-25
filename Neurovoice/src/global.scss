@@ -42,8 +42,12 @@
   --app-border-color: #000000;   
 }
 
+ion-menu-button {
+  color: var(--app-text-color) !important;
+}
+
 /* Aplica el color a todos los ion-content de la app */
-ion-content, ion-app, ion- page {
+ion-content, ion-app, ion-page {
   --background: var(--app-background) !important;
   color: var(--app-text-color) !important;
 }

@@ -27,6 +27,11 @@
   flex-direction: column;
   justify-content: space-between; /* separa imagen y descripción */
   position: relative;
+  border-radius: 20px;
+  background: #1a1a1a;
+  box-shadow: 
+    0 4px 10px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(255,255,255,0.05);
 
   /* animación al hacer click */
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -37,12 +42,38 @@
   }
 }
 
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  justify-content: center;
+}
+
+@media (min-width: 300px) {
+  .cards-row {
+    grid-template-columns: repeat(2, 1fr); // tablet chica
+  }
+}
+
+@media (min-width: 600px) {
+  .cards-row {
+    grid-template-columns: repeat(3, 1fr); // tablet chica
+  }
+}
+
+@media (min-width: 900px) {
+  .cards-row {
+    grid-template-columns: repeat(4, 1fr); // TU CASO: 948px → 4 cartas
+  }
+}
+
 .card-container ion-card-header {
   flex-grow: 1; /* hace que la imagen use el espacio disponible */
 }
 
 .card-container ion-img {
-  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 .card-container .description {
@@ -69,7 +100,11 @@
   text-align: center;
 }
 
-.categorias {
+.categories {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--app-background);
   display: flex;
   overflow-x: auto;
   overflow-y: hidden;
@@ -85,15 +120,17 @@ ion-chip {
   flex: 0 0 auto;
   background: var(--ion-color-light);
   border-radius: 16px;
+  background-color: #1a1a1a;
 } 
 
 ion-chip.selected {
   transform: scale(1.1);
   font-weight: bold;
   transition: all 0.2s ease;
+  background-color: #000000;
 }
 
-ion-chip ion-label {
+.label-category {
   color: gray !important;
 }
 
@@ -103,4 +140,6 @@ ion-chip ion-label {
   ion-card.placeholder-card {
     min-height: 260px; // un poco más grande en tablet
   }
+
+
 }
