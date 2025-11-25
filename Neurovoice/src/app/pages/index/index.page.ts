@@ -24,7 +24,7 @@ export class IndexPage implements OnInit {
 
   constructor(
     private cardService: Cards,
-    private modalCtrl: ModalController, 
+    private modalCtrl: ModalController,
     private indexedDB: IndexedDBService,
     private db: IndexedDBService
   ) { }
@@ -70,7 +70,7 @@ export class IndexPage implements OnInit {
   }
 
   categories = [
-    'Favoritos', 'Tecnología', 'Hogar', 'Deporte', 'Alimentación', 
+    'Favoritos', 'Tecnología', 'Hogar', 'Deporte', 'Alimentación',
     'Ocio', 'Necesidades', 'Emociones', 'Relaciones', 'Animales'];
 
   selectCategory(category: string) {
