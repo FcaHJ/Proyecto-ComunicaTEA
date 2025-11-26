@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { CardApiService } from './cards.api.service';
 
 @Injectable({
@@ -15,4 +15,4 @@ export class CollectionsService {
   addCardToCollection(collectionId: number, cardId: number) { return this.api.addCardToCollection(collectionId, cardId); }
   removeCardFromCollection(collectionId: number, cardId: number) { return this.api.removeCardFromCollection(collectionId, cardId); }
 }
-
+*/

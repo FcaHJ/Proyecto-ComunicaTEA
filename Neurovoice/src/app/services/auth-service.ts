@@ -1,50 +1,56 @@
 import { Injectable } from '@angular/core';
 import { IndexedDBService } from './indexeddb.service';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+
+  private API_URL = 'http://localhost:5000/api/users';
+
    private loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
    currentUser$ = this.loggedIn$.asObservable();
 
-  constructor(private db: IndexedDBService) {
-    this.loadInitialUsers();
+  constructor(private http: HttpClient) {
 
     const saved = localStorage.getItem('loggedUser');
-    if (saved) this.loggedIn$.next(JSON.parse(saved));
+    if (saved) this.loggedIn$.next(true);
   }
 
   get isLoggedIn$() {
     return this.loggedIn$.asObservable();
   }
 
-  private async loadInitialUsers() {
-    const users = await this.db.getUsers();
-    if (!users || users.length === 0) {
-      const data = await fetch('assets/users.json').then(res => res.json());
-      await this.db.setUsers(data);
-      console.log('Usuarios iniciales cargados.');
-    }
+
+  login(username: string, password: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.API_URL}/login`, { username, password })
+        .subscribe({
+          next: (user: any) => {
+            localStorage.setItem('loggedUser', JSON.stringify(user));
+            this.loggedIn$.next(true);
+            resolve(user);
+          },
+          error: (err) => {
+            console.error('Error de login:', err);
+            resolve(null);
+          }
+        });
+    });
   }
 
-  async login(username: string, password: string): Promise<any> {
-    const users = await this.db.getUsers();
-
-    const user = users.find(
-      (u: any) => u.username === username && u.password === password
-    );
-
-    if (user) {
-      localStorage.setItem('loggedUser', JSON.stringify(user));
-      console.log("Usuario logeado correctamente: ",user );
-      this.loggedIn$.next(true);
-
-      return user;
-    }
-    return null;
+  register(username: string, password: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.API_URL}/register`, { username, password })
+        .subscribe({
+          next: (user: any) => resolve(user),
+          error: (err) => resolve(null)
+        });
+    });
   }
 
   logout() {

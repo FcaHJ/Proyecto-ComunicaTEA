@@ -45,6 +45,11 @@ export class ApiService {
     return this.http.delete<any>(`${this.baseUrl}/cards/${id}`).pipe(catchError(this.handleError));
   }
 
+  toggleFavorite(cardId: number, fav: boolean) {
+    return this.http.put(`${this.baseUrl}/cards/${cardId}/fav`, { fav });
+  }
+
+
   // COLLECTIONS
   getCollections(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/collections/`).pipe(catchError(this.handleError));
@@ -61,6 +66,19 @@ export class ApiService {
   deleteCollection(id: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/collections/${id}`).pipe(catchError(this.handleError));
   }
+
+  getCollection(id: number): Observable<any> {
+  return this.http.get(`${this.baseUrl}/collections/${id}`);
+  }
+
+  addCardToCollection(collectionId: number, cardId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/collections/${collectionId}/add/${cardId}`, {});
+  }
+
+  removeCardFromCollection(collectionId: number, cardId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/collections/${collectionId}/cards/${cardId}`);
+  }
+
 
   // USERS / AUTH
   register(user: any): Observable<any> {

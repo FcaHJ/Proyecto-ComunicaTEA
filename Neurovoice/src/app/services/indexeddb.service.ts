@@ -32,7 +32,7 @@ export class IndexedDBService {
 
       //ESTADISTICAS DIARIAS
       if (!db.objectStoreNames.contains('dailyStats')) {
-        db.createObjectStore('dailyStats', { keyPath: 'id' }); 
+        db.createObjectStore('dailyStats', { keyPath: 'id' });
       }
     };
   }

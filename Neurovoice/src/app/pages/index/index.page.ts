@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Cards } from '../../services/cards';
+import { CardApiService } from '../../services/cards.api.service';
 import { ModalController } from '@ionic/angular';
 import { CardViewModal } from '../../modals/card-view/card-view.modal';
 import { IndexedDBService } from '../../services/indexeddb.service';
+import { ApiService } from '../../services/api.service';
+
 
 
 @Component({
@@ -23,51 +25,40 @@ export class IndexPage implements OnInit {
   selectedCard: any = null;
 
   constructor(
-    private cardService: Cards,
     private modalCtrl: ModalController,
-    private indexedDB: IndexedDBService,
-    private db: IndexedDBService
+    private db: IndexedDBService,
+    private api: ApiService
   ) { }
 
   async ngOnInit() {
-    this.cards = await this.cardService.getCards();
-    try {
-      // Intentar obtener cartas desde IndexedDB
-      const storedCards = await this.indexedDB.getCards();
-
-      // Versión local de los datos
-      const currentVersion = 3; // <- aumenta este número cuando modifiques algo
-      const storedVersion = Number(localStorage.getItem('cardsVersion')) || 0;
-
-      // Cargar cartas del JSON
-      const response = await fetch('assets/data/cards.json');
-      const jsonCards = await response.json();
-
-      // Si no hay cartas guardadas, cargar desde cards.json
-      if (!storedCards || storedCards.length !== jsonCards.length || storedVersion < currentVersion) {
-        console.log('Reemplazando cartas antiguas por las nuevas...');
-        // Guardar las cartas en IndexedDB para persistencia
-        await this.indexedDB.replaceAllCards(jsonCards);
-        localStorage.setItem('cardsVersion', currentVersion.toString());
-        this.cards = jsonCards;
-      } else {
-        // Si ya existen cartas guardadas, usarlas directamente
-        this.cards = storedCards;
-      }
-
-      // Asegurar que las cartas se muestren siempre
-      this.filteredCards = this.cards;
-
-      } catch (error) {
-        console.error('Error cargando cartas:', error);
-      }
-    }
-
-
-  async toggleFav(card : any){
-    card.fav = !card.fav;
-    await this.cardService.setCards(this.cards);
+    this.loadCards();
   }
+
+
+  loadCards() {
+    this.api.getCards().subscribe({
+      next: (data) => {
+        this.cards = data;
+        this.filteredCards = data;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+
+  toggleFav(card: any) {
+  card.fav = !card.fav; // cambia en pantalla primero
+
+  this.api.toggleFavorite(card.id, card.fav).subscribe({
+    next: () => console.log("Favorito actualizado"),
+    error: (err) => {
+      console.error("Error al actualizar fav", err);
+      // Si falla, revertir cambio local
+      card.fav = !card.fav;
+    }
+    });
+  }
+
 
   categories = [
     'Favoritos', 'Tecnología', 'Hogar', 'Deporte', 'Alimentación',
@@ -75,26 +66,24 @@ export class IndexPage implements OnInit {
 
   selectCategory(category: string) {
     if (this.selectedCategory === category) {
-    // Si ya está seleccionada, deseleccionamos
-    this.selectedCategory = null;
-    this.filteredCards = this.cards;
-  } else {
-    this.selectedCategory = category;
-    this.filteredCards = this.cards.filter(c => this.shouldShowCard(c));
+      this.selectedCategory = null;
+      this.filteredCards = this.cards;
+    } else {
+      this.selectedCategory = category;
+      this.filteredCards = this.cards.filter(c => this.shouldShowCard(c));
+    }
   }
+
+
+  async openModal(card: any) {
+      const modal = await this.modalCtrl.create({
+        component: CardViewModal,
+        cssClass: 'card-modal',
+        componentProps: { card }
+      });
+
+      await modal.present();
   }
-
-
-async openModal(card: any) {
-  const modal = await this.modalCtrl.create({
-    component: CardViewModal,
-    cssClass: 'card-modal'
-  });
-
-  modal.componentProps = { card };
-
-  await modal.present();
-}
 
   closeModal() {
     this.isModalOpen = false;
@@ -103,13 +92,13 @@ async openModal(card: any) {
 
 
   shouldShowCard(card: any): boolean {
-  if (!this.selectedCategory) return true;
+    if (!this.selectedCategory) return true;
 
-  if (this.selectedCategory === 'Favoritos') {
-    return card.fav;
-  }
+    if (this.selectedCategory === 'Favoritos') {
+      return card.fav === true;
+    }
 
-  return card.category === this.selectedCategory;
+    return card.category === this.selectedCategory;
   }
 
 

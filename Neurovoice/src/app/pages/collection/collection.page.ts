@@ -3,10 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Cards } from '../../services/cards';
+import { CardApiService } from '../../services/cards.api.service';
 import { SelectCardModal } from '../../modals/select-card/select-card.modal';
 import { CardViewModal } from '../../modals/card-view/card-view.modal';
 import { AlertController } from '@ionic/angular';
+import { ApiService } from '../../services/api.service';
+import { firstValueFrom } from 'rxjs';
+
+
 
 
 
@@ -24,19 +28,33 @@ import { AlertController } from '@ionic/angular';
 export class CollectionPage implements OnInit {
 
   collection: any = null;
+  collectionId!: number;
 
   constructor(
     private route: ActivatedRoute,
-    private cardService: Cards,
     private modalCtrl: ModalController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private api: ApiService
   ) {}
 
-  async ngOnInit() {
-    const collections = await this.cardService.getCollections();
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.collection = collections.find(c => c.id === id);
+  ngOnInit() {
+    this.collectionId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadCollection();
   }
+
+  async loadCollection() {
+  this.collectionId = Number(this.route.snapshot.paramMap.get('id'));
+
+  const collections = await firstValueFrom(this.api.getCollections());
+  this.collection = collections.find(c => c.id === this.collectionId) || null;
+
+  if (!this.collection) {
+    console.error("Collection NOT FOUND");
+    return;
+  }
+
+  console.log("Loaded collection:", this.collection);
+}
 
   async openSelectModal() {
     const modal = await this.modalCtrl.create({
@@ -46,66 +64,62 @@ export class CollectionPage implements OnInit {
       }
     });
 
-    modal.onDidDismiss().then(async res => {
+    modal.onDidDismiss().then(res => {
       if (!res.data) return;
 
       const card = res.data;
 
-      if (this.collection.cards.length >= 5) {
-        const alert = await this.alertCtrl.create({
-          header: 'Límite alcanzado',
-          message: 'Máximo 5 cartas por colección.',
-          buttons: ['OK']
-        });
+      this.api.addCardToCollection(this.collectionId, card.id).subscribe({
+        next: () => this.loadCollection(),
+        error: async (err) => {
 
-        await alert.present();
-        return;
+          if (err.error?.error === 'Collection has reached max_cards') {
+            const alert = await this.alertCtrl.create({
+              header: 'Límite alcanzado',
+              message: 'Máximo 5 cartas por colección.',
+              buttons: ['OK']
+            });
+            alert.present();
+          }
+
+          console.error(err);
         }
-
-      this.collection.cards.push(card);
-
-      const collections = await this.cardService.getCollections();
-      const index = collections.findIndex(c => c.id === this.collection.id);
-      collections[index] = this.collection;
-      await this.cardService.setCollections(collections);
+      });
     });
 
     modal.present();
   }
 
   async openCard(card: any) {
-  const modal = await this.modalCtrl.create({
-    component: CardViewModal,
-    cssClass: 'card-modal',
-    componentProps: { card }
-  });
+    const modal = await this.modalCtrl.create({
+      component: CardViewModal,
+      cssClass: 'card-modal',
+      componentProps: { card }
+    });
 
-  await modal.present();
-}
+    await modal.present();
+  }
 
 
-async removeCard(cardId: number) {
-  const alert = await this.alertCtrl.create({
-    header: 'Eliminar carta',
-    message: '¿Quieres quitar esta carta de la colección?',
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' },
-      {
-        text: 'Eliminar',
-        handler: async () => {
-          this.collection.cards = this.collection.cards.filter((c: any) => c.id !== cardId);
+  async removeCard(cardId: number) {
+      const alert = await this.alertCtrl.create({
+        header: 'Eliminar carta',
+        message: '¿Quieres quitar esta carta de la colección?',
+        buttons: [
+          { text: 'Cancelar', role: 'cancel' },
+          {
+            text: 'Eliminar',
+            handler: () => {
+              this.api.removeCardFromCollection(this.collectionId, cardId).subscribe({
+                next: () => this.loadCollection(),
+                error: (err) => console.error(err)
+              });
+            }
+          }
+        ]
+      });
 
-          const collections = await this.cardService.getCollections();
-          const index = collections.findIndex(c => c.id === this.collection.id);
-          collections[index] = this.collection;
-
-          await this.cardService.setCollections(collections);
-        }
-      }
-    ]
-  });
-
-  await alert.present();
+      alert.present();
   }
 
 

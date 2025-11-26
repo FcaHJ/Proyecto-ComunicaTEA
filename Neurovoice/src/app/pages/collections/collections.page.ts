@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Cards } from '../../services/cards';
+import { CardApiService } from '../../services/cards.api.service';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
+import { ApiService } from '../../services/api.service';
 
 
 
@@ -24,13 +25,13 @@ export class CollectionsPage implements OnInit {
   collections: any[] = [];
 
   constructor(
-    private cardService: Cards,
     private alertCtrl: AlertController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private api: ApiService
   ) {}
 
-  async ngOnInit() {
-    await this.loadCollections();
+  ngOnInit() {
+    this.loadCollections();
   }
 
   async createCollection() {
@@ -47,17 +48,16 @@ export class CollectionsPage implements OnInit {
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Crear',
-          handler: async (data) => {
+          handler: (data) => {
             if (!data.name) return;
 
-            const newCollection = {
-              id: Date.now(),
+            this.api.createCollection({
               name: data.name,
-              cards: []  // Aquí el usuario agregará hasta 10
-            };
-
-            this.collections.push(newCollection);
-            await this.cardService.setCollections(this.collections);
+              max_cards: 5
+            }).subscribe({
+              next: () => this.loadCollections(),
+              error: (err) => console.error(err)
+            });
           }
         }
       ]
@@ -66,51 +66,65 @@ export class CollectionsPage implements OnInit {
     alert.present();
   }
 
-  async addCardToCollection(collectionId: number, card: any) {
-  const collections = await this.cardService.getCollections();
-  const col = collections.find(c => c.id === collectionId);
+    addCardToCollection(collectionId: number, card: any) {
+    this.api.getCollections().subscribe(collections => {
 
-  if (!col) return;
+      const col = collections.find(c => c.id === collectionId);
+      if (!col) return;
 
-  if (col.cards.length >= 5) {
-    alert('Esta colección ya tiene el máximo de 5 cartas.');
-    return;
-  }
+      if (col.cards.length >= 5) {
+        alert('Esta colección ya tiene el máximo de 5 cartas.');
+        return;
+      }
 
-  col.cards.push(card);
-  await this.cardService.setCollections(collections);
+      // Agregar carta localmente
+      col.cards.push(card);
+
+      // Actualizar en el backend
+      this.api.updateCollection(collectionId, col).subscribe({
+        next: () => {
+          console.log("Colección actualizada correctamente");
+        },
+        error: (err) => {
+          console.error("Error al actualizar la colección", err);
+        }
+      });
+
+    });
   }
 
   async deleteCollection(id: number) {
 
-  const alert = await this.alertCtrl.create({
-    header: 'Eliminar colección',
-    message: '¿Seguro que deseas eliminar esta colección?',
-    buttons: [
-      {
-        text: 'Cancelar',
-        role: 'cancel'
-      },
-      {
-        text: 'Eliminar',
-        role: 'destructive',
-        handler: async () => {
-          await this.cardService.deleteCollection(id);
-          this.collections = this.collections.filter(c => c.id !== id);
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar colección',
+      message: '¿Seguro que deseas eliminar esta colección?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.api.deleteCollection(id).subscribe({
+              next: () => this.loadCollections(),
+              error: (err) => console.error(err)
+            });
+          }
         }
-      }
-    ]
-  });
+      ]
+    });
 
-  await alert.present();
+    await alert.present();
   }
 
   ionViewWillEnter() {
-  this.loadCollections();
+    this.loadCollections();
   }
 
-  async loadCollections() {
-  this.collections = await this.cardService.getCollections();
+  loadCollections() {
+    this.api.getCollections().subscribe({
+      next: (data) => this.collections = data,
+      error: (err) => console.error(err)
+    });
   }
 
 
