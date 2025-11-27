@@ -56,15 +56,24 @@ export class CollectionsPage implements OnInit {
               max_cards: 5
             }).subscribe({
               next: () => this.loadCollections(),
-              error: (err) => console.error(err)
+
+              error: (err) => {
+                if (err.status === 400 && err.error?.error) {
+                  // 🔥 Mostrar alerta amigable
+                  this.showError(err.error.error);
+                } else {
+                  console.error(err);
+                }
+              }
             });
           }
         }
       ]
     });
 
-    alert.present();
+    await alert.present();
   }
+
 
     addCardToCollection(collectionId: number, card: any) {
     this.api.getCollections().subscribe(collections => {
@@ -125,6 +134,16 @@ export class CollectionsPage implements OnInit {
       next: (data) => this.collections = data,
       error: (err) => console.error(err)
     });
+  }
+
+
+  async showError(msg: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Error',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
 
