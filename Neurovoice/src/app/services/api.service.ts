@@ -71,7 +71,7 @@ export class ApiService {
   return this.http.get(`${this.baseUrl}/collections/${id}`);
   }
 
-  addCardToCollection(collectionId: number, cardId: number): Observable<any> {
+  addCardToCollection(collectionId: number, cardId: number, position: number): Observable<any> {
     return this.http.post(`${this.baseUrl}/collections/${collectionId}/add/${cardId}`, {});
   }
 

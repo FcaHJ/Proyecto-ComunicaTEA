@@ -7,6 +7,11 @@
 
     <ion-title>{{ collection?.name }}</ion-title>
 
+    <ion-button fill="clear" slot="end"
+                  (click)="readCollection(); $event.stopPropagation()">
+        <ion-icon name="volume-high-outline"></ion-icon>
+      </ion-button>
+
     <ion-buttons slot="end">
       <ion-button (click)="openSelectModal()">
         <ion-icon name="add-circle-outline"></ion-icon>

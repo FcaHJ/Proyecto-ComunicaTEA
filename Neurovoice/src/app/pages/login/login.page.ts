@@ -36,16 +36,11 @@ export class LoginPage implements OnInit {
   }
 
   async loginUser() {
-    try {
+        try {
       const user = await this.auth.login(this.username, this.password);
 
-      if (user) {
-        // redirigir según el rol
-        if (user.role === 'admin') {
-          this.router.navigate(['/index']);
-        } else if (user.role === 'user') {
-          this.router.navigate(['/index']);
-        }
+      if (user) {   
+        this.router.navigate(['/index']);
       } else {
         this.errorMessage = 'Usuario o contraseña incorrectos.';
       }
