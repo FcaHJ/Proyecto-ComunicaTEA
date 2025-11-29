@@ -15,7 +15,13 @@ export class Tts {
     neutral : { pitch: 1.0, rate: 1.0}
   }
 
-  constructor() {}
+  constructor() {
+      speechSynthesis.onvoiceschanged = () => {
+      speechSynthesis.getVoices();
+    };
+  }
+
+  
 
   async speak(text: string, gender: VoiceGender, tone: VoiceTone) {
     const toneCfg = this.toneSettings[tone]
